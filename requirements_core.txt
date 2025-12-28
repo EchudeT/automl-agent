@@ -1,0 +1,52 @@
+# Core dependencies for AutoML-Agent
+# Install with: pip install -r requirements_core.txt
+
+# PyTorch
+torch==2.2.1
+torchvision==0.17.1
+torchaudio==2.2.1
+
+# LLM and AI Agents
+openai>=1.30.2
+anthropic==0.26.1
+langchain>=1.2.0
+langchain-community>=0.4.0
+langchain-core>=1.2.0
+langchain-text-splitters>=1.1.0
+tiktoken==0.6.0
+
+# Core ML libraries
+optuna==3.6.1
+scikit-learn
+xgboost==2.0.3
+lightgbm==4.3.0
+catboost==1.2.5
+
+# Data processing
+pandas
+numpy<2.0.0
+beautifulsoup4==4.12.3
+joblib
+jsonlines==4.0.0
+
+# Utilities
+num2words==0.5.13
+validators==0.28.0
+dacite==1.8.1
+setuptools
+
+# NLP and Embeddings (新增)
+sentence-transformers>=5.0.0
+faiss-cpu>=1.13.0
+transformers>=4.40.0
+
+# Document Processing (新增)
+arxivloader>=1.0.0
+google-search-results>=2.4.0
+
+# Additional utilities (新增)
+h5py>=3.15.0
+tensorboard>=2.20.0
+lxml>=6.0.0
+
+rank_bm25

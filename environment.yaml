@@ -1,0 +1,15 @@
+name: automl_env
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - numpy<2.0.0
+  - pandas
+  - scikit-learn
+  - pip
+  - pip:
+      - -r requirements_core.txt
+
+
