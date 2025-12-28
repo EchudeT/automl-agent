@@ -4,8 +4,8 @@
 
 安装
 1. 将configs.py里面的"key待填"填上相应的api key
-2. 将utils/__init__.py里面的"key待填"填上相应的serpapi key，可以在https://serpapi.com/注册获得
-3. 从https://github.com/World-Snapshot/papers-with-code/tree/main/data下载datasets.json和evaluation-tables.json到当前目录下的_data\paperswithcode目录下
+2. 将utils/__init__.py里面的"key待填"填上相应的serpapi key，可以在 https://serpapi.com/ 注册获得
+3. 从 https://github.com/World-Snapshot/papers-with-code/tree/main/data 下载datasets.json和evaluation-tables.json到当前目录下的_data\paperswithcode目录下
 4. 依赖直接使用environment.yaml安装环境
 
 其他
