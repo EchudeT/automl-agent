@@ -2,8 +2,6 @@ import requests
 
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
-from serpapi import GoogleSearch
-from kaggle.api.kaggle_api_extended import KaggleApi
 
 from openai import OpenAI
 from configs import AVAILABLE_LLMs
@@ -23,9 +21,17 @@ class color:
 
 
 def get_kaggle():
-    api = KaggleApi()
-    api.authenticate()
-    return api
+    try:
+        # 尝试导入并认证
+        from kaggle.api.kaggle_api_extended import KaggleApi
+        api = KaggleApi()
+        api.authenticate()
+        return api
+    except Exception as e:
+        # 如果报错（比如没key），打印警告并返回 None，假装没事发生
+        print(f"Warning: Kaggle API authentication failed ({e}). Skipping Kaggle search.")
+        return None
+
 
 
 # def search_web(query):
@@ -75,10 +81,11 @@ def get_kaggle():
 #     ]
 
 def search_web(query):
+    from serpapi import GoogleSearch
     params = {
         "engine": "google",
         "q": query,
-        "api_key": "your api key",
+        "api_key": "key待填",
     }
 
     search = GoogleSearch(params)
@@ -98,13 +105,13 @@ def print_message(sender, msg, pid=None):
         "operation": color.YELLOW,
     }
     sender_label = {
-        "user": "💬 You:",
-        "system": "⚠️ SYSTEM NOTICE ⚠️\n",
-        "manager": "🕴🏻 Agent Manager:",
-        "model": f"🦙 Model Agent{pid}:",
-        "data": f"🦙 Data Agent{pid}:",
-        "prompt": "🦙 Prompt Agent:",
-        "operation": f"🦙 Operation Agent{pid}:",
+        "user": "[You]:",
+        "system": "[SYSTEM NOTICE]\n",
+        "manager": "[Agent Manager]:",
+        "model": f"[Model Agent{pid}]:",
+        "data": f"[Data Agent{pid}]:",
+        "prompt": "[Prompt Agent]:",
+        "operation": f"[Operation Agent{pid}]:",
     }
 
     msg = f"{color.BOLD}{sender_color[sender]}{sender_label[sender]}{color.END}{color.END} {msg}"
@@ -113,10 +120,32 @@ def print_message(sender, msg, pid=None):
 
 
 def get_client(llm: str = "qwen"):
-    if llm.startswith("gpt"):
-        return OpenAI(api_key=AVAILABLE_LLMs[llm]["api_key"])
-    else:
+    """
+    Get OpenAI-compatible client for the specified LLM.
+
+    Args:
+        llm: LLM identifier from AVAILABLE_LLMs dict
+
+    Returns:
+        OpenAI client instance
+
+    Environment Variables:
+        OPENAI_API_KEY: Override API key
+        OPENAI_BASE_URL: Override base URL
+        MODEL_NAME: Override model name
+    """
+    if llm not in AVAILABLE_LLMs:
+        print_message("system", f"Warning: LLM '{llm}' not found in AVAILABLE_LLMs, using 'qwen' as default")
+        llm = "qwen"
+
+    config = AVAILABLE_LLMs[llm]
+
+    # Check if base_url is provided (for custom/local models)
+    if "base_url" in config:
         return OpenAI(
-            base_url=AVAILABLE_LLMs[llm]["base_url"],
-            api_key=AVAILABLE_LLMs[llm]["api_key"],
+            base_url=config["base_url"],
+            api_key=config["api_key"],
         )
+    else:
+        # Standard OpenAI client
+        return OpenAI(api_key=config["api_key"])

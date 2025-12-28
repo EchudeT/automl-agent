@@ -46,6 +46,11 @@ agent_profile = """You are the world's best MLOps engineer of an automated machi
 6. Write Python codes to build the web application demo using the Gradio library.
 7. Run the model evaluation using the given Python functions and summarize the results for validation againts the user's requirements.
 """
+# 6. Do NOT call launch() on Gradio interfaces. Just build the interface object if needed, but do not start the web server, as it blocks the execution pipeline.
+# 8. Set os.environ["TOKENIZERS_PARALLELISM"] = "false" and Set dataloader num_workers = 0.
+# 9. **DO NOT generate any Gradio or Streamlit code.** and **DO NOT execute app.launch()**. 
+# 10. Just save the metrics to a JSON file and print them. Starting a web server will crash the automation pipeline.
+# 11. the application will run in a sub-process in Windows, so make sure the code is compatible with Windows OS.
 
 
 class OperationAgent:

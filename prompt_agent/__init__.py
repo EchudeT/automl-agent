@@ -68,10 +68,10 @@ class PromptAgent:
     def __init__(self):
         self.agent_type = "prompt"
         self.client = OpenAI(
-            base_url=AVAILABLE_LLMs["prompt-llm"]["base_url"],
-            api_key=AVAILABLE_LLMs["prompt-llm"]["api_key"],
+            base_url=AVAILABLE_LLMs["qwen"]["base_url"],
+            api_key=AVAILABLE_LLMs["qwen"]["api_key"],
         )
-        self.model = AVAILABLE_LLMs["prompt-llm"]["model"]
+        self.model = AVAILABLE_LLMs["qwen"]["model"]
 
     def parse_openai(self, instruction, return_json=False):
         print_message(
@@ -119,6 +119,7 @@ class PromptAgent:
         
         #Valid JSON Response#
         """
+        print("Your Model\n", f"Using model: {self.model}\n")
         res = self.client.chat.completions.create(
             model=self.model,
             messages=[

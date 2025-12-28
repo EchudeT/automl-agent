@@ -169,7 +169,16 @@ def retrieve_infer(**kwargs):
 
     search_query = response.choices[0].message.content.strip().replace('"', "")
     kaggle_api = get_kaggle()
-    datasets = kaggle_api.datasets_list(search=search_query, sort_by="votes")[:10]
+    if kaggle_api is None:
+        print("Warning: Kaggle API is unavailable. Skipping dataset search.")
+        return None 
+    # datasets = kaggle_api.datasets_list(search=search_query, sort_by="votes")[:10]
+    try:
+        datasets = kaggle_api.datasets_list(search=search_query, sort_by="votes")[:10]
+    except Exception as e:
+        print(f"Warning: Failed to search Kaggle: {e}")
+        return None
+
     for dataset in datasets:
         tags = [tag["name"] for tag in dataset["tags"]]
         if _is_applicable(tags, kwargs["modality"]):

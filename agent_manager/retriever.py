@@ -7,7 +7,7 @@ from configs import AVAILABLE_LLMs
 from openai import OpenAI
 from validators import url
 
-from langchain.schema import Document
+from langchain_core.documents import Document
 from langchain_community.document_loaders import AsyncHtmlLoader, PDFMinerLoader
 from langchain_community.document_transformers import BeautifulSoupTransformer
 
@@ -15,6 +15,10 @@ def retrieve_kaggle(
     user_requirements: dict, user_requirement_summary: str, llm_model, client, top_k: int = 10
 ):
     kaggle_api = get_kaggle()
+    if kaggle_api is None:
+        print_message("manager", "Kaggle API not found or not configured properly.")
+        return ""
+    
     print_message("manager", "I am searching relevant Kaggle notebooks...")
 
     user_task = (

@@ -27,6 +27,12 @@ from glob import glob
 agent_profile = """You are an experienced senior project manager of a automated machine learning project (AutoML). You have two main responsibilities as follows.
 1. Receive requirements and/or inquiries from users through a well-structured JSON object.
 2. Using recent knowledge and state-of-the-art studies to devise promising high-quality plans for data scientists, machine learning research engineers, and MLOps engineers in your team to execute subsequent processes based on the user requirements you have received.
+
+IMPORTANT GUIDELINES FOR SPECIAL TASKS:
+- **Temporal Action Localization / Action Detection**: When the user's task involves temporal action localization, action detection, action spotting, or finding when actions occur in videos (keywords: "temporal", "localize", "detect actions", "action boundaries"), you must instruct the team to use the `train_actionformer_wrapper.py` script instead of writing ActionFormer model code from scratch.
+  - ActionFormer is a complex model with FPN, multi-scale processing, and specialized losses that should NOT be implemented from scratch.
+  - The wrapper script handles all complexity: just specify hyperparameters (learning_rate, epochs, batch_size, config_template).
+  - Example instruction: "Use train_actionformer_wrapper.py with config_template='thumos_i3d', learning_rate=0.0001, epochs=30, batch_size=2"
 """
 
 # agent_profile = """You are the world's best senior project manager of a automated machine learning project (AutoML). You have two main responsibilities as follows.
@@ -46,9 +52,14 @@ plan_conditions = """
 - Ensure that your plan is up-to-date with current state-of-the-art knowledge.
 - Ensure that your plan is based on the requirements and objectives described in the above JSON object.
 - Ensure that your plan is designed for AI agents instead of human experts. These agents are capable of conducting machine learning and artificial intelligence research.
-- Ensure that your plan is self-contained with sufficient instructions to be executed by the AI agents. 
+- Ensure that your plan is self-contained with sufficient instructions to be executed by the AI agents.
 - Ensure that your plan includes all the key points and instructions (from handling data to modeling) so that the AI agents can successfully implement them. Do NOT directly write the code.
-- Ensure that your plan completely include the end-to-end process of machine learning or artificial intelligence model development pipeline in detail (i.e., from data retrieval to model training and evaluation) when applicable based on the given requirements."""
+- Ensure that your plan completely include the end-to-end process of machine learning or artificial intelligence model development pipeline in detail (i.e., from data retrieval to model training and evaluation) when applicable based on the given requirements.
+
+SPECIAL INSTRUCTIONS FOR COMPLEX MODELS:
+- **For Temporal Action Localization tasks**: DO NOT instruct agents to write ActionFormer model code from scratch. Instead, instruct them to use the provided `train_actionformer_wrapper.py` script with appropriate hyperparameters. The wrapper handles all model complexity internally.
+- **For other complex architectures**: If a task requires a well-established complex model (like Transformer variants, specialized computer vision models, etc.), prefer using existing implementations or wrapper scripts over writing from scratch when available.
+"""
 
 possible_states = {
     "INIT": "",
